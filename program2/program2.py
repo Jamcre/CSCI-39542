@@ -16,7 +16,6 @@ def clean_df(df, year=2015):
 
 
 def filter_health(df, keep):
-    for i
     return df
 
 
