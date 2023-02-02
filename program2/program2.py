@@ -51,12 +51,11 @@ def add_indicator(row):  # done
 
 
 def find_trees(df, species):  # done
-    # create empty list
     lst_of_trees = []
     # remove all entries that don't match name, or empty if not in df
-    df = df[df['spc_latin'] == species]
+    df = df.loc[df['spc_latin'] == species]
     # convert address column into list
-    lst_of_trees = df['address'].tolist
+    lst_of_trees = df['address'].tolist()
     # return list
     return lst_of_trees
 
