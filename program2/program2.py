@@ -3,7 +3,7 @@ Name:  James Crespo
 Email: james.crespo64@myhunter.cuny.edu
 Resources: the internet
 """
-
+import pandas as pd
 
 def clean_df(df, year=2015):
     return df
@@ -25,3 +25,6 @@ def find_trees(df, species):
 def count_by_area(df, area='boroname'):
     total = 0
     return total
+
+pd.DataFrame({'a':[1,2]})
+
