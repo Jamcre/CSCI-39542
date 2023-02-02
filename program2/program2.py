@@ -5,13 +5,36 @@ Resources: the internet
 """
 import pandas as pd
 
-def clean_df(df, year=2015):
+
+def clean_df(df, year=2015):  # done
+
+    # lists with all columns that shouldn't be dropped for each possible year
+    lst_2015 = ['tree_dbh', 'health', 'spc_latin', 'spc_common', 'address', 'zipcode', 'boroname',
+                'nta', 'latitude', 'longitude', 'council_district', 'census_tract']
+    lst_2005 = ['tree_dbh', 'status', 'spc_latin', 'spc_common', 'address', 'zipcode', 'boroname',
+                'nta', 'latitude', 'longitude', 'cncldist', 'census_tract']
+    lst_1995 = ['diameter', 'condition', 'spc_latin', 'spc_common', 'address', 'zip_original',
+                'borough', 'nta_2010', 'latitude', 'longitude', 'council_district',
+                'censustract_2010']
+
+    # cleaning the df for 2015
     if year == 2015:
+        df = df.loc[:, lst_2015]
 
+    # cleaning the df for 2005
     if year == 2005:
+        df = df.loc[:, lst_2005]
+        df.rename(columns={'status': 'health',
+                  'cncldist': 'council_district'}, inplace=True)
 
+    # cleaning the df for 1995
     if year == 1995:
+        df = df.loc[:, lst_1995]
+        df.rename(columns={'diameter': 'tree_dbh', 'condition': 'health', 'zip_original': 'zipcode',
+                  'borough': 'boroname', 'nta_2010': 'nta', 'censustract_2010': 'census_tract'},
+                  inplace=True)
 
+    # return clean dataframe
     return df
 
 
@@ -19,18 +42,21 @@ def filter_health(df, keep):
     return df
 
 
-def add_indicator(row):
-    return 0
+def add_indicator(row):  # done
+    if (row[0] > 10) & (row[1] != 'Poor'):
+        return 1
+    else:
+        return 0
 
 
-def find_trees(df, species):
-    lst = []
-    return lst
+def find_trees(df, species):  # done
+    lst_of_trees = []
+    for row in df:
+        if species == row[2]:
+            lst_of_trees.append(row[4])
+    return lst_of_trees
 
 
 def count_by_area(df, area='boroname'):
     total = 0
     return total
-
-pd.DataFrame({'a':[1,2]})
-
