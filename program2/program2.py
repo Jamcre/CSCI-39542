@@ -39,7 +39,7 @@ def clean_df(df, year=2015):  # done
 
 
 def filter_health(df, keep):
-    df = df.loc[df['health'].isin([keep])]
+    df = df.loc[df['health'].isin(keep)]
     return df
 
 
