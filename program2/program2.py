@@ -6,10 +6,17 @@ Resources: the internet
 
 
 def clean_df(df, year=2015):
+    if year == 2015:
+
+    if year == 2005:
+
+    if year == 1995:
+
     return df
 
 
 def filter_health(df, keep):
+    for i
     return df
 
 
