@@ -6,6 +6,12 @@ Resources: the internet
 import pandas as pd
 
 def clean_df(df, year=2015):
+    if year == 2015:
+
+    if year == 2005:
+
+    if year == 1995:
+
     return df
 
 
