@@ -52,6 +52,10 @@ def add_indicator(row):  # done
 
 def find_trees(df, species):  # done
     lst_of_trees = []
+    for row in df:
+        if row['spc_latin'] == species:
+            lst_of_trees.append(row['address'])
+
     return lst_of_trees
 
 
