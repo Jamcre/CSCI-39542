@@ -3,7 +3,6 @@ Name:  James Michael Crespo
 Email: james.crespo64@myhunter.cuny.edu
 Resources: the internet
 """
-import pandas as pd
 
 
 def clean_df(df, year=2015):  # done
@@ -38,7 +37,7 @@ def clean_df(df, year=2015):  # done
     return df
 
 
-def filter_health(df, keep):
+def filter_health(df, keep): # done
     df = df.loc[df['health'].isin(keep)]
     return df
 
@@ -50,7 +49,7 @@ def add_indicator(row):  # done
         return 0
 
 
-def find_trees(df, species):  # done
+def find_trees(df, species):  # not done
     lst_of_trees = []
     # remove all entries that don't match name, or empty if not in df
     df = df.loc[df['spc_latin'] == species]
@@ -60,6 +59,6 @@ def find_trees(df, species):  # done
     return lst_of_trees
 
 
-def count_by_area(df, area='boroname'):
+def count_by_area(df, area='boroname'): # not done
     total = 0
     return total
