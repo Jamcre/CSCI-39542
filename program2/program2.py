@@ -39,6 +39,7 @@ def clean_df(df, year=2015):  # done
 
 
 def filter_health(df, keep):
+    df = df.loc[df['health'].isin([keep])]
     return df
 
 
@@ -51,9 +52,6 @@ def add_indicator(row):  # done
 
 def find_trees(df, species):  # done
     lst_of_trees = []
-    for row in df:
-        if species == row[2]:
-            lst_of_trees.append(row[4])
     return lst_of_trees
 
 
