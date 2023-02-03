@@ -52,18 +52,14 @@ def add_indicator(row):  # done
 def find_trees(df, species):  # not done
     # create empty list for return
     lst = []
-    # make species string uppercase to compare
-    species.upper()
 
-    # make dataframe 'spc_latin' column uppercase
-    df['spc_latin'] = df['spc_latin'].str.upper()
-
-    # make dataframe with only specified species
-    new_df = df[df['spc_latin'] == species]
-    if new_df.empty:
+    # make dataframe with species, use lower to match case to compare
+    df = df.loc[(df['spc_latin'].str.lower() == species.lower())]
+    if df.empty:
         return lst
-    lst = list(new_df['address'])
-    return lst
+    else:
+        lst = list(df['address'])
+        return lst
 
 
 def count_by_area(df, area='boroname'):  # not done
