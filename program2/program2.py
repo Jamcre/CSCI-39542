@@ -82,7 +82,7 @@ def find_trees(df, species):  # done
     return lst
 
 
-def count_by_area(df, area='boroname'):  # not done
+def count_by_area(df, area='boroname'):  # done
     """
     returns sum of the number of trees, grouped by area
 
