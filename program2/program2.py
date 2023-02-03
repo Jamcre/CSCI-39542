@@ -51,10 +51,10 @@ def add_indicator(row):  # done
 
 def find_trees(df, species):  # not done
     lst = []
-    df = df[df['spc_latin'].str.contains(species)]
-    if df.empty:
+    new_df = df[df['spc_latin'].str.contains(species, na=False)]
+    if new_df.empty:
         return lst
-    lst = list(df['address'])
+    lst = list(new_df['address'])
     return lst
 
 
