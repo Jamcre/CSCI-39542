@@ -37,7 +37,7 @@ def clean_df(df, year=2015):  # done
     return df
 
 
-def filter_health(df, keep): # done
+def filter_health(df, keep):  # done
     df = df.loc[df['health'].isin(keep)]
     return df
 
@@ -50,15 +50,14 @@ def add_indicator(row):  # done
 
 
 def find_trees(df, species):  # not done
-    lst_of_trees = []
-    # remove all entries that don't match name, or empty if not in df
-    df = df.loc[df['spc_latin'] == species]
-    # convert address column into list
-    lst_of_trees = df['address'].tolist()
-    # return list
-    return lst_of_trees
+    lst = []
+    df = df[df['spc_latin'].str.contains(species)]
+    if df.empty:
+        return lst
+    lst = list(df['address'])
+    return lst
 
 
-def count_by_area(df, area='boroname'): # not done
+def count_by_area(df, area='boroname'):  # not done
     total = 0
     return total
