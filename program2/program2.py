@@ -89,5 +89,4 @@ def count_by_area(df, area='boroname'):  # not done
     :param df: dataframe that contains 'area' column
     :param area: name of a column in df. The default value is "boroname"
     """
-    total = 0
-    return total
+    return df.groupby(area).size()
