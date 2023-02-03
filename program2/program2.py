@@ -50,8 +50,16 @@ def add_indicator(row):  # done
 
 
 def find_trees(df, species):  # not done
+    # create empty list for return
     lst = []
-    new_df = df[df['spc_latin'].str.contains(species, na=False)]
+    # make species string uppercase to compare
+    species.upper()
+
+    # make dataframe 'spc_latin' column uppercase
+    df['spc_latin'] = df['spc_latin'].str.upper()
+
+    # make dataframe with only specified species
+    new_df = df[df['spc_latin'] == species]
     if new_df.empty:
         return lst
     lst = list(new_df['address'])
