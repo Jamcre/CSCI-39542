@@ -4,6 +4,8 @@ Email: james.crespo64@myhunter.cuny.edu
 Resources: the internet
 """
 
+# add function comments
+
 
 def clean_df(df, year=2015):  # done
 
@@ -36,17 +38,22 @@ def clean_df(df, year=2015):  # done
     # return clean dataframe
     return df
 
+# add function comments
+
 
 def filter_health(df, keep):  # done
     df = df.loc[df['health'].isin(keep)]
     return df
 
+# add function comments
+
 
 def add_indicator(row):  # done
     if (row[0] > 10) & (row[1] != 'Poor'):
         return 1
-    else:
-        return 0
+    return 0
+
+# add function comments
 
 
 def find_trees(df, species):  # not done
@@ -60,6 +67,8 @@ def find_trees(df, species):  # not done
     else:
         lst = list(df['address'])
         return lst
+
+ # add function comments
 
 
 def count_by_area(df, area='boroname'):  # not done
