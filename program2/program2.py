@@ -3,7 +3,6 @@ Name:  James Michael Crespo
 Email: james.crespo64@myhunter.cuny.edu
 Resources: the internet
 """
-import pandas as pd
 
 
 def clean_df(df, year=2015):  # done
