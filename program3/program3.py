@@ -36,7 +36,7 @@ def clean_df(df, year=2015):  # done
     return df
 
 
-def make_nta_df(file_name):  # might done
+def make_nta_df(file_name):  # done
     """
     opens file 'file_name' as a dataframe, and returns a dataframe containing columns
     'nta_code','nta_name', and 'population'
@@ -45,8 +45,14 @@ def make_nta_df(file_name):  # might done
                       and names for neighborhood tabulation areas
     """
     df = pd.read_csv(file_name)
-    target_columns = ['nta_code', 'nta_name', 'population']
+    target_columns = ['Geographic Area - Neighborhood Tabulation Area (NTA)* Code',
+                      'Geographic Area - Neighborhood Tabulation Area (NTA)* Name',
+                      'Total Population 2010 Number']
     df = df.loc[:, target_columns]
+    df.rename(columns={'Geographic Area - Neighborhood Tabulation Area (NTA)* Code': 'nta_code',
+                       'Geographic Area - Neighborhood Tabulation Area (NTA)* Name': 'nta_name',
+                       'Total Population 2010 Number': 'population'}, inplace=True)
+    df = df.dropna()
     return df
 
 
@@ -118,9 +124,14 @@ def main():
     """
     function tests
     """
-    df_si = pd.read_csv('trees_si_2015.csv')
+    # clean_df() test on Staten Island tree census data
+    df_si = pd.read_csv('program3/trees_si_2015.csv')
     df_si = clean_df(df_si)
     print(df_si)
+
+    # make_nta_df() test on demographic information organized by neighborhood
+    nta_df = make_nta_df('program3/Census_Demographics_NTA.csv')
+    print(nta_df)
 
 
 if __name__ == "__main__":
