@@ -80,3 +80,12 @@ def test_mse(loss_fnc=mse_loss):  # not done
                      (a numeric value and a Series of numeric values),
                      and returns a numeric value. It has a default value of mse_loss.
     """
+
+
+def main():
+    # function tests
+    print("Tests:")
+
+
+if __name__ == "__main__":
+    main()
