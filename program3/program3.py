@@ -83,7 +83,9 @@ def test_mse(loss_fnc=mse_loss):  # not done
 
 
 def main():
-    # function tests
+    """
+    function tests
+    """
     print("Tests:")
 
 
