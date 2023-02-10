@@ -65,7 +65,7 @@ def count_by_area(df):  # done
     return df.groupby(['nta']).size().rename('num_trees').reset_index()
 
 
-def neighborhood_trees(tree_df, nta_df):  # might be done
+def neighborhood_trees(tree_df, nta_df):  # done
     """
     joins to input dataframes, 'tree_df' as left table. join should be on NTA code.
     resulting dataframe should have columns in order
@@ -74,8 +74,9 @@ def neighborhood_trees(tree_df, nta_df):  # might be done
     :param tree_df: dataframe containing column 'nta'
     :param nta_df: dataframe containing columns 'NTACode' and 'NTAName'
     """
-    merged_df = pd.merge(tree_df, nta_df, how='left', on='NTACode')
-    return merged_df
+    nta_df = nta_df.rename(columns={'nta_code': 'nta'})
+    df = pd.merge(tree_df, nta_df, how='left', on='nta')
+    return df.assign(trees_per_capita=df['num_trees'] / df['population'])
 
 
 def compute_summary_stats(df, col):  # not done
