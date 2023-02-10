@@ -56,14 +56,13 @@ def make_nta_df(file_name):  # done
     return df
 
 
-def count_by_area(df):  # not done
+def count_by_area(df):  # done
     """
     modifies dataframe to have columns 'nta' and 'num_trees', returns modified df
 
     :param df: dataframe with 'nta' column
     """
-    df['num_trees'] = df.groupby('nta')['nta'].transform('count')
-    return df
+    return df.groupby(['nta']).size().rename('num_trees').reset_index()
 
 
 def neighborhood_trees(tree_df, nta_df):  # might be done
@@ -137,6 +136,27 @@ def main():
     # count_by_area() test
     df_si_counts = count_by_area(df_si)
     print(df_si_counts)
+
+    # neightborhood_trees() test
+    df = neighborhood_trees(df_si_counts, nta_df)
+    print(df)
+
+    # # compute_summary_stats() test
+    # si_mu, si_med = compute_summary_stats(df, 'trees_per_capita')
+    # print(
+    #     f'For the Staten Island tree counts, mean = {si_mu}, median = {si_med}.')
+
+    # # mse_loss() test
+    # print(
+    #     f'For MSE, mean has loss of {mse_loss(si_mu,df["trees_per_capita"])} and median has loss of {mse_loss(si_med,df["trees_per_capita"])}.')
+
+    # # mae_loss() test
+    # print(
+    #     f'For MAE, mean has loss of {mae_loss(si_mu,df["trees_per_capita"])} and median has loss of {mae_loss(si_med,df["trees_per_capita"])}.')
+
+    # # test_mse() test
+    # print(f'Testing mse_loss:  {test_mse(mse_loss)}')
+    # print(f'Testing mae_loss:  {test_mse(mae_loss)}')
 
 
 if __name__ == "__main__":
