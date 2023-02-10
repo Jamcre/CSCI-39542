@@ -62,6 +62,7 @@ def count_by_area(df):  # not done
 
     :param df: dataframe with 'nta' column
     """
+    df['num_trees'] = df.groupby('nta')['nta'].transform('count')
     return df
 
 
@@ -132,6 +133,10 @@ def main():
     # make_nta_df() test on demographic information organized by neighborhood
     nta_df = make_nta_df('program3/Census_Demographics_NTA.csv')
     print(nta_df)
+
+    # count_by_area() test
+    df_si_counts = count_by_area(df_si)
+    print(df_si_counts)
 
 
 if __name__ == "__main__":
