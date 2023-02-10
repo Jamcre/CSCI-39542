@@ -97,7 +97,10 @@ def mse_loss(theta, y_vals):  # not done
     :param theta: a numeric value
     :param y_vals: a Series containing numeric values
     """
-    return 0
+    total = 0
+    for y_values in y_vals:
+        total += pow(theta - y_values, 2)
+    return total/len(y_vals)
 
 
 def mae_loss(theta, y_vals):  # not done
@@ -107,7 +110,10 @@ def mae_loss(theta, y_vals):  # not done
     :param theta: a numeric value
     :param y_vals: a Series containing numeric values
     """
-    return 0
+    total = 0
+    for y_values in y_vals:
+        total += abs(theta - y_values)
+    return total/len(y_vals)
 
 
 def test_mse(loss_fnc=mse_loss):  # not done
@@ -119,7 +125,11 @@ def test_mse(loss_fnc=mse_loss):  # not done
                      (a numeric value and a Series of numeric values),
                      and returns a numeric value. It has a default value of mse_loss.
     """
-    return False
+    test_theta = 5
+    test_y_vals = [1, 2, 3, 4, 5]
+    expected = 6
+    result = loss_fnc(test_theta, test_y_vals)
+    return result == expected
 
 
 def main():
@@ -148,17 +158,19 @@ def main():
     print(
         f'For the Staten Island tree counts, mean = {si_mu}, median = {si_med}.')
 
-    # # mse_loss() test
-    # print(
-    #     f'For MSE, mean has loss of {mse_loss(si_mu,df["trees_per_capita"])} and median has loss of {mse_loss(si_med,df["trees_per_capita"])}.')
+    # mse_loss() test
+    print(
+        f'For MSE, mean has loss of {mse_loss(si_mu, df["trees_per_capita"])}'
+        'and median has loss of {mse_loss(si_med, df["trees_per_capita"])}.')
 
-    # # mae_loss() test
-    # print(
-    #     f'For MAE, mean has loss of {mae_loss(si_mu,df["trees_per_capita"])} and median has loss of {mae_loss(si_med,df["trees_per_capita"])}.')
+    # mae_loss() test
+    print(
+        f'For MAE, mean has loss of {mae_loss(si_mu, df["trees_per_capita"])}'
+        'and median has loss of {mae_loss(si_med, df["trees_per_capita"])}.')
 
-    # # test_mse() test
-    # print(f'Testing mse_loss:  {test_mse(mse_loss)}')
-    # print(f'Testing mae_loss:  {test_mse(mae_loss)}')
+    # test_mse() test
+    print(f'Testing mse_loss:  {test_mse(mse_loss)}')
+    print(f'Testing mae_loss:  {test_mse(mae_loss)}')
 
 
 if __name__ == "__main__":
