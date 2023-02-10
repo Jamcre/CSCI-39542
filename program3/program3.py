@@ -86,7 +86,8 @@ def compute_summary_stats(df, col):  # not done
     :param df: dataframe containing column 'col'
     :param col: name of numeric-valued col in dataframe
     """
-    return 1, 0
+    # return (mean, median)
+    return (df[col].mean(), df[col].median())
 
 
 def mse_loss(theta, y_vals):  # not done
@@ -142,10 +143,10 @@ def main():
     df = neighborhood_trees(df_si_counts, nta_df)
     print(df)
 
-    # # compute_summary_stats() test
-    # si_mu, si_med = compute_summary_stats(df, 'trees_per_capita')
-    # print(
-    #     f'For the Staten Island tree counts, mean = {si_mu}, median = {si_med}.')
+    # compute_summary_stats() test
+    si_mu, si_med = compute_summary_stats(df, 'trees_per_capita')
+    print(
+        f'For the Staten Island tree counts, mean = {si_mu}, median = {si_med}.')
 
     # # mse_loss() test
     # print(
