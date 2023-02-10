@@ -79,7 +79,7 @@ def neighborhood_trees(tree_df, nta_df):  # done
     return df.assign(trees_per_capita=df['num_trees'] / df['population'])
 
 
-def compute_summary_stats(df, col):  # not done
+def compute_summary_stats(df, col):  # done
     """
     returns mean and median of series df[col]
 
@@ -90,7 +90,7 @@ def compute_summary_stats(df, col):  # not done
     return (df[col].mean(), df[col].median())
 
 
-def mse_loss(theta, y_vals):  # not done
+def mse_loss(theta, y_vals):  # done
     """
     computes the Mean Squared Error of param 'theta' and series 'y_vals'
 
@@ -103,7 +103,7 @@ def mse_loss(theta, y_vals):  # not done
     return total/len(y_vals)
 
 
-def mae_loss(theta, y_vals):  # not done
+def mae_loss(theta, y_vals):  # done
     """
     computes the Mean Absolute Error of param 'theta and Series 'y_vals'
 
@@ -116,7 +116,7 @@ def mae_loss(theta, y_vals):  # not done
     return total/len(y_vals)
 
 
-def test_mse(loss_fnc=mse_loss):  # not done
+def test_mse(loss_fnc=mse_loss):  # done
     """
     used to test whether the loss_fnc returning 'True',
     if the loss_fnc performs correctly, and 'False' otherwise
