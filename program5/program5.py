@@ -38,6 +38,7 @@ def compute_year_over_year(df):
 
 
 def main():
+    print('tests')
 
 
 if __name__ == "__main__":
