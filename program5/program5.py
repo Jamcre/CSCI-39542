@@ -4,13 +4,16 @@
     Resources:  Internet
 """
 import pandas as pd
+import numpy as np
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 
 def parse_datetime(df, column='DATE'):
     """
     creates 3 columns in df, 'timestamp' with date in YYYY-MM-DD format,
     'month' with numeric month value,
-    'year' with year value
+    'year' with year value, returns new df
 
     :param df: a dataframe contatining column 'column'
     :param column: name of a column, default value of 'DATE'
@@ -22,7 +25,20 @@ def parse_datetime(df, column='DATE'):
 
 
 def compute_lin_reg(xes, yes):
-    return 0, 1
+    """
+    computes the slope and y-intercept of linear regression line, 
+    using ordinary least squares
+
+    :param xes: iterables of numeric values representing independent variable
+    :param yes: iterables of numeric values representing dependent variable 
+    """
+    sd_x = np.std(xes)
+    sd_y = np.std(yes)
+    r = xes.corr(yes)
+    print(r)
+    theta_1 = r * sd_y/sd_x
+    theta_0 = yes.mean() - theta_1 * xes.mean()
+    return theta_0, theta_1
 
 
 def predict(xes, theta_0, theta_1):
@@ -50,9 +66,23 @@ def compute_year_over_year(df):
 
 
 def main():
+    # parse_datetime() test
     df_1yr = pd.read_csv('program5/fred_info_2022_1yr.csv')
     df_1yr = parse_datetime(df_1yr)
     print(df_1yr)
+
+    # visualization
+    # sns.lineplot(data=df_1yr, x='month', y='USINFO')
+    # plt.ylabel('Number of Jobs')
+    # plt.xticks(range(1, 13),
+    #            ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+    # plt.title('Information Services Employment, 2022')
+    # plt.show()
+
+    # compute_line_reg() test
+    theta_0, theta_1 = compute_lin_reg(df_1yr['month'], df_1yr['USINFO'])
+    xes = np.array([0, 12])
+    yes = theta_1*xes + theta_0
 
 
 if __name__ == "__main__":
