@@ -5,8 +5,6 @@
 """
 import pandas as pd
 import numpy as np
-# import seaborn as sns
-# import matplotlib.pyplot as plt
 
 
 def parse_datetime(df, column='DATE'):
@@ -95,21 +93,14 @@ def compute_ytd(df):
 
     :param df: Dataframe contatining columns 'month', 'year', and 'USINFO'
     """
-    # create loop to iterate through entire df
-    # get 'USINFO' value of current row
-    # get 'USINFO' value of row where 'month' = 1 and year = current_row.year
-    # find the difference between current 'USINFO' value and 'USINFO' beginning of year value
-    # append to list
-
-    curr_row_jobs = 0
-    start_year_jobs = 0
     result_lst = []
-    for index, row in df.iterrows():
-        curr_row_jobs = row['USINFO']
-        start_year_jobs = df.loc[(df['year'] == row['year']) & (
-            df['month'] == 1), 'USINFO'].iloc[0]
-        result_lst.append(curr_row_jobs - start_year_jobs)
-    return pd.Series(result_lst)
+    index_lst = df.index.tolist()
+    for index in df.index:
+        curr_jobs = df['USINFO'][index]
+        temp_jobs = df[(df['year'] == df['year'][index]) & (
+            df['month'] == df[df['year'] == df['year'][index]]['month'].min())]['USINFO'].iloc[0]
+        result_lst.append(curr_jobs - temp_jobs)
+    return pd.Series(data=result_lst, index=index_lst)
 
 
 def compute_year_over_year(df):
@@ -120,47 +111,3 @@ def compute_year_over_year(df):
     :param df: Dataframe containing columns 'month', 'year', and 'USINFO'
     """
     return df['USINFO'].pct_change(periods=12) * 100
-
-
-def main():
-    """
-    test functions
-    """
-    # parse_datetime() test
-    df_1yr = pd.read_csv('program5/fred_info_2022_1yr.csv')
-    df_1yr = parse_datetime(df_1yr)
-    print(df_1yr)
-
-    # visualization
-    # sns.lineplot(data=df_1yr, x='month', y='USINFO')
-    # plt.ylabel('Number of Jobs')
-    # plt.xticks(range(1, 13),
-    #  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
-    # plt.title('Information Services Employment, 2022')
-    # plt.show()
-
-    # compute_line_reg() test
-    theta_0, theta_1 = compute_lin_reg(df_1yr['month'], df_1yr['USINFO'])
-    xes = np.array([0, 12])
-    yes = theta_1*xes + theta_0
-
-    # predict() test
-    months_2023 = np.array([13, 14, 15, 16, 17])
-    print(predict(months_2023, theta_0, theta_1))
-
-    df_5yr = pd.read_csv('program5/fred_info_2022_5yr.csv')
-    df_5yr = parse_datetime(df_5yr)
-    print(df_5yr[:30])
-    print(df_5yr.index.to_series())
-
-    # compute_ytd() test
-    df_all = pd.read_csv('program5/fred_info_2022_1yr.csv')
-    df_all = parse_datetime(df_all)
-    print(df_all)
-    df_all['YTD'] = compute_ytd(df_all)
-    print(df_all)
-    print('DONE')
-
-
-if __name__ == "__main__":
-    main()
