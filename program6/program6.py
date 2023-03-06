@@ -3,11 +3,11 @@
     Email: james.crespo64@myhunter.cuny.edu
     Resources:  Internet
 """
+import pickle
 import pandas as pd
-import numpy as np
-import datetime as dt
-import pickle as pkl
-import sklearn as sk
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 def import_data(file_name):
@@ -85,34 +85,56 @@ def encode_categorical_col(col, prefix):
 
 
 def split_test_train(df, xes_col_names, y_col_name, test_size=0.25, random_state=1870):
-    return df
+    """
+    uses sklearn train_test_split function to split data into a training and test subset.
+    remaining subsets are returned, x_train, x_test, y_train, y_test
+
+    :param df: df of NYC Yellow Tax Trip Data from OpenData NYC to which add_boro() has been used
+    :param xes_col_names: list of columns that contain independent variables
+    :param y_col_name: name of the column of dependent variables
+    :param test_size: accepts float(0 to 1), is proportion of data for training. default = 0.25
+    :param random_state: Used as seed for randomization. default = 1870
+    """
+    x_data = df[xes_col_names]
+    y_data = df[y_col_name]
+    x_train, x_test, y_train, y_test = train_test_split(
+        x_data, y_data, test_size=test_size, random_state=random_state)
+    return x_train, x_test, y_train, y_test
 
 
 def fit_linear_regression(x_train, y_train):
-    return 0
+    """
+    Fits a linear model to x_train and y_train, using sklearn.linear_model.LinearRegression.
+    The resulting model should be returned as bytestream, using pickle (see Lecture 4).
+
+    :param x_train: an array of numeric columns with no null values.
+    :param y_train: an array of numeric columns with no null values.
+    """
+    model = LinearRegression().fit(x_train, y_train)
+    return pickle.dumps(model)
 
 
 def predict_using_trained_model(mod_pkl, xes, yes):
-    return 0, 1
+    """
+    Computes and returns the mean squared error and r2 score,
+    between the values predicted by the model (mod_pkl on x) and the actual values (y).
+    sklearn.metrics contains two functions that may be of use: mean_squared_error and r2_score.
+
+
+    :param mod_pkl: a trained model for the data, stored in pickle format.
+    :param xes: an array or DataFrame of numeric columns with no null values.
+    :param yes: an array or DataFrame of numeric columns with no null values.
+    """
+    model = pickle.loads(mod_pkl)
+    y_pred = model.predict(xes)
+    mse = mean_squared_error(yes, y_pred)
+    r2_val = r2_score(yes, y_pred)
+
+    return mse, r2_val
 
 
 def main():
-    """test"""
-    df = import_data("program6/taxi_jfk_june2020.csv")
-    df = add_tip_time_features(df)
-    print(df[['trip_distance', 'duration', 'dayofweek',
-          'total_amount', 'percent_tip']].head())
-
-    print(df[['passenger_count', 'trip_distance']].head(10))
-    df = impute_numeric_cols(df)
-    print(df[['passenger_count', 'trip_distance']].head(10))
-
-    df = add_boro(df, 'program6/taxi_zones.csv')
-    print('\nThe locations and borough columns:')
-    print(f"{df[['PULocationID','PU_borough','DOLocationID','DO_borough']]}")
-
-    df_do = encode_categorical_col(df['DO_borough'], 'DO_')
-    print(df_do.head())
+    """test, deleted because didn't want to deal with pylint for submissions"""
 
 
 if __name__ == "__main__":
