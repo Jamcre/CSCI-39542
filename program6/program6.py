@@ -63,14 +63,9 @@ def add_boro(df, file_name) -> pd.DataFrame:
     :param file_name: name of csv file for Taxi Zones from NYC OpenData
     """
     temp_df = pd.read_csv(file_name)
-    df = pd.merge(df, temp_df, left_on='PULocationID',
-                  right_on='LocationID', how='left')
-    df = pd.merge(df, temp_df, left_on='DOLocationID',
-                  right_on='LocationID', how='left')
-    borough_cols = ['Borough', 'Borough_do']
-    df = df[borough_cols].rename(
-        columns={'Borough': 'PU_borough', 'Borough_do': 'DO_borough'})
-
+    id_and_borough = dict(zip(temp_df['LocationID'], temp_df['borough']))
+    df['PU_borough'] = df['PULocationID'].map(id_and_borough)
+    df['DO_borough'] = df['DOLocationID'].map(id_and_borough)
     return df
 
 
