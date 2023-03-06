@@ -66,7 +66,7 @@ def add_boro(df, file_name) -> pd.DataFrame:
     id_and_borough = dict(zip(temp_df['LocationID'], temp_df['borough']))
     df['PU_borough'] = df['PULocationID'].map(id_and_borough)
     df['DO_borough'] = df['DOLocationID'].map(id_and_borough)
-    return df
+    return df.reset_index(drop=True)
 
 
 def encode_categorical_col(col, prefix):
