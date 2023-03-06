@@ -70,7 +70,18 @@ def add_boro(df, file_name) -> pd.DataFrame:
 
 
 def encode_categorical_col(col, prefix):
-    return 0
+    """
+    Too much to explain, just run it and look at what is returned
+
+    :param col: a column of categorical data
+    :param prefix: a prefix to use for the labels of the resulting columns
+    """
+    # Encoded df
+    df = pd.get_dummies(col, prefix=prefix, prefix_sep='')
+    # Sort colums alphabetically
+    df = df.sort_index(axis=1)
+    # return df with last col dropped
+    return df.iloc[:, :-1]
 
 
 def split_test_train(df, xes_col_names, y_col_name, test_size=0.25, random_state=1870):
@@ -99,6 +110,9 @@ def main():
     df = add_boro(df, 'program6/taxi_zones.csv')
     print('\nThe locations and borough columns:')
     print(f"{df[['PULocationID','PU_borough','DOLocationID','DO_borough']]}")
+
+    df_do = encode_categorical_col(df['DO_borough'], 'DO_')
+    print(df_do.head())
 
 
 if __name__ == "__main__":
