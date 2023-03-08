@@ -20,6 +20,9 @@ def binary_digit_clf(data, target, test_size=0.25, random_state=21):
     test_size: the size of the test set created when the data is divided into test and training sets with train_test_split. The default value is 0.25.
     random_state: the random seed used when the data is divided into test and training sets with train_test_split. The default value is 21.
     """
+    x_train, x_test, y_train, y_test = train_test_split(
+        data, target, test_size=test_size, random_state=random_state)
+    return x_train, x_test, y_train, y_test
 
 
 # Import datasets, classifiers and performance metrics:
