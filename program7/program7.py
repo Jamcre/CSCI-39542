@@ -16,8 +16,7 @@ def import_data(csv_file):
     :param csv_file: the name of a CSV file time series data for a commodity from FRED.
     """
     df = pd.read_csv(csv_file)
-    yes = df['USINFO']
-    xes = df.index.to_series()
+    df['units'] = df.index
     return df
 
 
@@ -78,6 +77,10 @@ def predict_using_trained_model(mod_pkl, poly_xes, yes):
 
 def main():
     """tests"""
+    csv_file = "program7/fred_cpi_eggs_oil_cars_INDEXED.csv"
+    df = import_data(csv_file)
+    print('The DataFrame:')
+    print(df)
 
 
 if __name__ == "__main__":
