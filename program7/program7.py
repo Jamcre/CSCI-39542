@@ -4,6 +4,12 @@ Email: james.crespo64@myhunter.cuny.edu
 Resources: the internet
 """
 import pandas as pd
+import numpy as np
+import pickle
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
 
 
 def import_data(csv_file):
@@ -30,6 +36,11 @@ def split_data(df, y_col_name, test_size=0.25, random_state=21):
     :param test_size: 0 to 1 value, show proportion of data set to use for training. Default=0.25
     :param random_state: Used as a seed to the randomization. Default=21
     """
+    x_data = df['units']
+    y_data = df[y_col_name]
+    x_train, x_test, y_train, y_test = train_test_split(
+        x_data, y_data, test_size=test_size, random_state=random_state)
+    return x_train, x_test, y_train, y_test
 
 
 def fit_poly(xes, yes, epsilon=100, verbose=False):
@@ -61,6 +72,7 @@ def fit_model(xes, yes, poly_deg=2, reg="lasso"):
     :param poly_deg: the degree of the polynomial features to be created. Default=2.
     :param reg: The type of regularization used: ridge or lasso. Default='lasso'.
     """
+    return 0
 
 
 def predict_using_trained_model(mod_pkl, poly_xes, yes):
@@ -73,6 +85,16 @@ def predict_using_trained_model(mod_pkl, poly_xes, yes):
     :param poly_xes: an array or DataFrame of numeric columns with no null values.
     :param yes: an array or DataFrame of numeric columns with no null values.
     """
+    # load model
+    model = pickle.loads(mod_pkl)
+    # predict using mod_pkl on poly_xes
+    y_pred = model.predict(poly_xes)
+    # compare prediction and actual
+    mse = mean_squared_error(yes, y_pred)
+    r2_val = r2_score(yes, y_pred)
+
+    # Return mean squared error and r2 score as tuple
+    return mse, r2_val
 
 
 def main():
@@ -81,6 +103,22 @@ def main():
     df = import_data(csv_file)
     print('The DataFrame:')
     print(df)
+
+    y_col_name = "CPI"
+    print(f'For the x column = "units", y_col = {y_col_name}')
+    print(df[["units", y_col_name]])
+    x_train_cpi, x_test_cpi, y_train_cpi, y_test_cpi = split_data(
+        df, y_col_name)
+
+    print('\nReturned sets of lengths:')
+    print(f"x_train_cpi: {len(x_train_cpi)}, x_test_cpi: {len(x_test_cpi)}")
+    print(f"y_train_cpi: {len(y_train_cpi)}, y_test_cpi: {len(y_test_cpi)}")
+
+    # eps = 5
+    # print(f'Finding the poly degree for training data with epsilon = {eps}:')
+    # deg = fit_poly(x_train_cpi.to_frame(), y_train_cpi,
+    #                epsilon=eps, verbose=True)
+    # print(f'For epsilon = {eps}, poly has degree {deg}.')
 
 
 if __name__ == "__main__":
