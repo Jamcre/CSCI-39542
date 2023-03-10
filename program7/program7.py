@@ -57,6 +57,34 @@ def fit_poly(xes, yes, epsilon=100, verbose=False):
     (in format: f'MSE cost for deg {deg} poly model: {error:.3f}' for degrees 1, 2, ...,
     until the error is below epsilon, see example below). Default=False.
     """
+    def fit_poly(xes, yes, epsilon=100, verbose=False):
+        # Initialize polynomial degree and error
+        deg = 1
+        error = np.inf
+
+        # Continue increasing polynomial degree until error is below epsilon
+        while error > epsilon:
+            # Create polynomial features
+            poly = PolynomialFeatures(degree=deg)
+            x_poly = poly.fit_transform(xes)
+
+            # Fit linear regression model
+            model = LinearRegression()
+            model.fit(x_poly, yes)
+
+            # Compute mean squared error on training set
+            y_pred = model.predict(x_poly)
+            error = mean_squared_error(yes, y_pred)
+
+        # Print error if verbose is True
+        if verbose:
+            print(f'MSE cost for deg {deg} poly model: {error:.3f}')
+
+        # Increase degree for next iteration
+        deg += 1
+
+    # Return the last model fitted (i.e., the one with error below epsilon)
+    return model
 
 
 def fit_model(xes, yes, poly_deg=2, reg="lasso"):
