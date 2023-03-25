@@ -69,6 +69,7 @@ def import_data(file_name):
     # Return clean df
     return df
 
+
 def make_transition_mx(df):
     """
     Function has 1 input. Returns a transition matrix, vals range from 0 - 1, each column sums to 1
@@ -79,17 +80,16 @@ def make_transition_mx(df):
                The first row (for locale United States2) is ignored and,
                the subsequent rows should contain the states in the same order as the column labels
     """
-    # Get relevant data
-    pop_data = df.iloc[1:, 3:].values
-    total_pop = df.iloc[1:, 1].values
-    # Create matrix
+    # Drop the first row
+    df = df.drop(index=0)
+    # Extract the relevant data
+    pop_data = df.iloc[:, 3:].values
+    total_pop = df['Total'].values
+    # Create the transition matrix
     transition_mx = pop_data / total_pop[:, np.newaxis]
-    # Fill diagonals with fraction of pop that migrated to state
-    np.fill_diagonal(transition_mx, df.iloc[1:, 2] / total_pop)
-    # Return matrix
+    # Fill the diagonal with the fraction of the population that stayed
+    np.fill_diagonal(transition_mx, df['Stayed'] / total_pop)
     return transition_mx
-
-
 
 def moving(transition_mx, starting_pop, num_years = 1):
     """
@@ -113,9 +113,11 @@ def steady_state(transition_mx, starting_pop):
 
     :param transition_mx: a square array of values between 0 and 1. Each row sums to 1.
     :param starting_pop: a 1D array of positive numeric values, same length as transition_mx.
-    :param num_years: name of col with dependent variable (predicted) in the model. default = 1.
     """
-
+    eig_val, eig_vec = np.linalg.eig(transition_mx)
+    steady_state_pop = eig_vec[:, np.argmax(eig_val)]
+    steady_state_pop /= steady_state_pop.sum()
+    return steady_state_pop * starting_pop.sum()
 
 
 def main():
@@ -127,6 +129,21 @@ def main():
 
     tr_mx = make_transition_mx(df_2019)
     print(tr_mx)
+
+    df_ca_ny = df_2019[ ['Locale','Total','Stayed','California','New York'] ]
+    df_ca_ny = df_ca_ny[ df_ca_ny['Locale'].isin(['United States2','California','New York']) ]
+    print(df_ca_ny)
+    tr_mx_ca_ny = make_transition_mx(df_ca_ny)
+    np.set_printoptions(precision=3, suppress=True)
+    print(tr_mx_ca_ny)
+    other = np.ones(2) - (tr_mx_ca_ny[0]+tr_mx_ca_ny[1])
+    tr_mx_ca_ny = np.concatenate((tr_mx_ca_ny,[other]),axis=0)
+    other_2_ny = (df_ca_ny.iloc[2,1]-(df_ca_ny.iloc[2,2]+df_ca_ny.iloc[2,3]))/df_ca_ny.iloc[2,1]
+    other_2_ca = (df_ca_ny.iloc[1,1]-(df_ca_ny.iloc[1,2]+df_ca_ny.iloc[1,3]))/df_ca_ny.iloc[2,1]
+    other_2_other = 1.0 - (other_2_ca + other_2_ny)
+    others = np.array([[other_2_ca], [other_2_ny], [other_2_other]])
+    tr_mx_ca_ny = np.append(tr_mx_ca_ny,others,axis=1)
+    print(tr_mx_ca_ny)
 
 if __name__ == "__main__":
     main()
