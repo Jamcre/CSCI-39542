@@ -79,11 +79,15 @@ def make_transition_mx(df):
                The first row (for locale United States2) is ignored and,
                the subsequent rows should contain the states in the same order as the column labels
     """
-    # Get numerical data for states, skip 3 cols and 1 row
-    state_vals = df.iloc[1:, 3:].to_numpy()
-    # Get total population that migrated in all states
-    total_migrated = np.sum(state_vals)
-
+    # Get relevant data
+    pop_data = df.iloc[1:, 3:].values
+    total_pop = df.iloc[1:, 1].values
+    # Create matrix
+    transition_mx = pop_data / total_pop[:, np.newaxis]
+    # Fill diagonals with fraction of pop that migrated to state
+    np.fill_diagonal(transition_mx, df.iloc[1:, 2] / total_pop)
+    # Return matrix
+    return transition_mx
 
 
 
@@ -95,6 +99,12 @@ def moving(transition_mx, starting_pop, num_years = 1):
     :param starting_pop: a 1D array of positive numeric values, same length as transition_mx.
     :param num_years: name of col with dependent variable (predicted) in the model. default = 1.
     """
+    # Get pop after 'num_years' using the transition matrix
+    current_pop = starting_pop
+    for i in range(num_years):
+        current_pop = np.dot(transition_mx, current_pop)
+    return current_pop
+
 def steady_state(transition_mx, starting_pop):
     """
     This function has 2 inputs. Returns array of the population of each state at the steady state.
@@ -105,3 +115,18 @@ def steady_state(transition_mx, starting_pop):
     :param starting_pop: a 1D array of positive numeric values, same length as transition_mx.
     :param num_years: name of col with dependent variable (predicted) in the model. default = 1.
     """
+
+
+
+def main():
+    """
+    Function tests
+    """
+    df_2019 = import_data('program9/State_to_State_Migrations_Table_2019.xls')
+    print(df_2019)
+
+    tr_mx = make_transition_mx(df_2019)
+    print(tr_mx)
+
+if __name__ == "__main__":
+    main()
