@@ -101,7 +101,7 @@ def moving(transition_mx, starting_pop, num_years = 1):
     """
     # Get pop after 'num_years' using the transition matrix
     current_pop = starting_pop
-    for index in range(num_years):
+    for _ in range(num_years):
         current_pop = np.dot(transition_mx, current_pop)
     return current_pop
 
